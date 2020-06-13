@@ -1,4 +1,4 @@
-const host = require("../config");
+const { host } = require("../config");
 
 const baseAPI = `${host}/wp-json/wp/v2/`;
 const postAPI = `${baseAPI}posts/?per_page=1&page=53`;

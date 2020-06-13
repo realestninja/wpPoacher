@@ -1,14 +1,24 @@
 const axios = require("axios");
 const { postAPI, mediaAPI } = require("./constants");
 
+const get = async (url) => {
+  let response = {};
+  try {
+    response = await axios.get(url);
+  } catch (e) {
+    console.error("e:", e);
+  }
+  return response;
+};
+
 const fetchData = async () => {
-  const response = await axios.get(postAPI);
+  const response = await get(postAPI);
   return response.data[0];
 };
 
-const fetchMedia = async (id) => {
-  const response = await axios.get(`${mediaAPI}${id}`);
+const fetchMediaUrl = async (id) => {
+  const response = await get(`${mediaAPI}${id}`);
   return response.data.source_url;
 };
 
-module.exports = { fetchData, fetchMedia };
+module.exports = { fetchData, fetchMediaUrl };
