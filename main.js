@@ -1,13 +1,5 @@
 const { fetchData, fetchMediaUrl, performDownload } = require("./src/apiCalls");
-const { omit } = require("./src/lib");
-
-const processData = (data) => {
-  let processedData = data;
-  processedData.teaser = data.excerpt.rendered;
-  const toBeDeleted = ["id", "guid", "date_gmt", "modified_gmt", "type", "excerpt", "author"];
-  processedData = omit(toBeDeleted, data);
-  return processedData;
-};
+const { processData } = require("./src/processData");
 
 const main = async () => {
   const rawContent = await fetchData();
