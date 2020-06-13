@@ -1,0 +1,3 @@
+const host = "https://demo.wp-api.org";
+
+module.exports = { host };
