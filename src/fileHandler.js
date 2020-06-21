@@ -2,12 +2,17 @@ const fs = require("fs");
 const isNil = require("lodash/isNil");
 
 const { fetchMediaUrl, performDownload } = require("./apiCalls");
+const { blogFolderPath, outputPath } = require("./constants");
 
-const createOutputFolder = (outputPath, folderName) => {
+const createOutputFolder = (folderName) => {
   if (!folderName.length > 0) return false;
+
   if (!fs.existsSync(outputPath)) fs.mkdirSync(outputPath);
-  if (fs.existsSync(outputPath)) {
-    const contentFolder = `${outputPath}/${folderName}`;
+
+  if (!fs.existsSync(blogFolderPath)) fs.mkdirSync(blogFolderPath);
+
+  if (fs.existsSync(blogFolderPath)) {
+    const contentFolder = `${blogFolderPath}/${folderName}`;
     if (!fs.existsSync(contentFolder)) fs.mkdirSync(contentFolder);
   }
   return true;
@@ -18,6 +23,8 @@ const createFolderName = (content) => {
   return `${trimmedDate}_${content.slug}`;
 };
 
+const getFolderPath = (folderName) => `${blogFolderPath}/${folderName}`;
+
 const storeData = (data, path) => {
   try {
     fs.writeFileSync(path, JSON.stringify(data));
@@ -27,11 +34,10 @@ const storeData = (data, path) => {
 };
 
 const saveContent = async (content) => {
-  const outputPath = "./output";
   const folderName = createFolderName(content);
 
-  if (createOutputFolder(outputPath, folderName)) {
-    const contentFolder = `${outputPath}/${folderName}`;
+  if (createOutputFolder(folderName)) {
+    const contentFolder = getFolderPath(folderName);
 
     storeData(content, `${contentFolder}/content.json`);
 
