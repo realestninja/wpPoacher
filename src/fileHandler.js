@@ -8,7 +8,7 @@ const createOutputFolder = (outputPath, folderName) => {
   if (!fs.existsSync(outputPath)) fs.mkdirSync(outputPath);
   if (fs.existsSync(outputPath)) {
     const contentFolder = `${outputPath}/${folderName}`;
-    if (!fs.existsSync(outputPath)) fs.mkdirSync(contentFolder);
+    if (!fs.existsSync(contentFolder)) fs.mkdirSync(contentFolder);
   }
   return true;
 };
