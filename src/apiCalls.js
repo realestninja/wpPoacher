@@ -4,6 +4,12 @@ const request = require("request");
 
 const { postAPI, mediaAPI } = require("./constants");
 
+const checkIfAvailable = async (url) => {
+  const response = await axios.head(url);
+  console.log("response.status: ", response.status);
+  return response.status === 200;
+};
+
 const get = async (url) => {
   let response = {};
   try {
@@ -16,8 +22,13 @@ const get = async (url) => {
 };
 
 const fetchData = async (page) => {
-  const response = await get(`${postAPI}${page}`);
-  return response ? response.data[0] : response;
+  const postIsAvailable = await checkIfAvailable(`${postAPI}${page}`);
+  console.log("postIsAvailable:", postIsAvailable);
+  if (postIsAvailable) {
+    const response = await get(`${postAPI}${page}`);
+    return response.data[0];
+  }
+  return false;
 };
 
 const fetchMediaUrl = async (id) => {
