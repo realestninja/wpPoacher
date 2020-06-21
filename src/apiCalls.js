@@ -6,7 +6,6 @@ const { postAPI, mediaAPI } = require("./constants");
 
 const checkIfAvailable = async (url) => {
   const response = await axios.head(url);
-  console.log("response.status: ", response.status);
   return response.status === 200;
 };
 
@@ -23,7 +22,6 @@ const get = async (url) => {
 
 const fetchData = async (page) => {
   const postIsAvailable = await checkIfAvailable(`${postAPI}${page}`);
-  console.log("postIsAvailable:", postIsAvailable);
   if (postIsAvailable) {
     const response = await get(`${postAPI}${page}`);
     return response.data[0];

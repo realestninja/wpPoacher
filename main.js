@@ -1,18 +1,17 @@
 const { fetchData } = require("./src/apiCalls");
-const { processData } = require("./src/processData");
-const { saveContent } = require("./src/fileHandler");
+const { handleContent } = require("./src/contentMediaHandler");
 
 const main = async () => {
   let currentPost = 1;
   while (currentPost > 0) {
     const rawContent = await fetchData(currentPost);
+    // const rawContent = await fetchData(1);
     if (!rawContent) {
       currentPost = -1;
     } else {
-      const content = processData(rawContent);
-      saveContent(content);
-      console.log(`${content.title.rendered}: DONE`);
+      handleContent(rawContent);
       currentPost += 1;
+      console.log(`${rawContent.title.rendered}: DONE`);
     }
   }
 };
