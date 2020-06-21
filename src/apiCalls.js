@@ -24,10 +24,9 @@ const fetchMediaUrl = async (id) => {
   return response.data.source_url;
 };
 
-const performDownload = (url, path, callback) => {
+const performDownload = (url, path) => {
   request(url)
-    .pipe(fs.createWriteStream(path))
-    .on("close", callback);
+    .pipe(fs.createWriteStream(path));
 };
 
 module.exports = { fetchData, fetchMediaUrl, performDownload };

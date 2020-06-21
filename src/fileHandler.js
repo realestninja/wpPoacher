@@ -1,14 +1,16 @@
 const fs = require("fs");
+const isNil = require("lodash/isNil");
 
 const { fetchMediaUrl, performDownload } = require("./apiCalls");
 
-const createOutputFolder = (folderName = "") => {
-  let outputFolderName = "./output";
-  if (!fs.existsSync(outputFolderName)) fs.mkdirSync(outputFolderName);
-  if (fs.existsSync(outputFolderName)) {
-    outputFolderName += `/${folderName}`;
-    if (!fs.existsSync(outputFolderName)) fs.mkdirSync(outputFolderName);
+const createOutputFolder = (outputPath, folderName) => {
+  if (!folderName.length > 0) return false;
+  if (!fs.existsSync(outputPath)) fs.mkdirSync(outputPath);
+  if (fs.existsSync(outputPath)) {
+    const contentFolder = `${outputPath}/${folderName}`;
+    if (!fs.existsSync(outputPath)) fs.mkdirSync(contentFolder);
   }
+  return true;
 };
 
 const createFolderName = (content) => {
@@ -16,15 +18,29 @@ const createFolderName = (content) => {
   return `${trimmedDate}_${content.slug}`;
 };
 
+const storeData = (data, path) => {
+  try {
+    fs.writeFileSync(path, JSON.stringify(data));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const saveContent = async (content) => {
+  const outputPath = "./output";
   const folderName = createFolderName(content);
 
-  createOutputFolder(folderName);
+  if (createOutputFolder(outputPath, folderName)) {
+    const contentFolder = `${outputPath}/${folderName}`;
 
-  const featuredMediaId = content.featured_media;
-  const mediaUrl = await fetchMediaUrl(featuredMediaId);
-  const file = "test.jpg";
-  performDownload(mediaUrl, file, () => console.log("done!"));
+    storeData(content, `${contentFolder}/content.json`);
+
+    const featuredMediaId = content.featured_media;
+    if (!isNil(featuredMediaId)) {
+      const mediaUrl = await fetchMediaUrl(featuredMediaId);
+      performDownload(mediaUrl, `${contentFolder}/featuredImage.jpg`);
+    }
+  }
 };
 
 module.exports = { saveContent };
