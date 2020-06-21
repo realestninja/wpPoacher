@@ -3,8 +3,12 @@ const axios = require("axios");
 const { postAPI, mediaAPI } = require("./constants");
 
 const checkIfAvailable = async (url) => {
-  const response = await axios.head(url);
-  return response.status === 200;
+  let isAvailable = true;
+  await axios.head(url)
+    .catch(() => {
+      isAvailable = false;
+    });
+  return isAvailable;
 };
 
 const get = async (url) => {
