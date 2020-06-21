@@ -10,7 +10,7 @@ const main = async () => {
     } else {
       handleContent(rawContent);
       currentPost += 1;
-      console.log(`${rawContent.title.rendered}: DONE`);
+      console.log(`${rawContent.title}: DONE`);
     }
   }
 };
