@@ -5,7 +5,6 @@ const main = async () => {
   let currentPost = 1;
   while (currentPost > 0) {
     const rawContent = await fetchData(currentPost);
-    // const rawContent = await fetchData(1);
     if (!rawContent) {
       currentPost = -1;
     } else {

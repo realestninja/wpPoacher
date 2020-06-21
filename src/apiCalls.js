@@ -1,6 +1,4 @@
 const axios = require("axios");
-const fs = require("fs");
-const request = require("request");
 
 const { postAPI, mediaAPI } = require("./constants");
 
@@ -31,12 +29,7 @@ const fetchData = async (page) => {
 
 const fetchMediaUrl = async (id) => {
   const response = await get(`${mediaAPI}${id}`);
-  return response.data.source_url;
+  return response ? response.data.source_url : false;
 };
 
-const performDownload = (url, path) => {
-  request(url)
-    .pipe(fs.createWriteStream(path));
-};
-
-module.exports = { fetchData, fetchMediaUrl, performDownload };
+module.exports = { fetchData, fetchMediaUrl };
