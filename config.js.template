@@ -1,3 +1,4 @@
 const host = "https://demo.wp-api.org";
+const postParamsToBeDeleted = [];
 
-module.exports = { host };
+module.exports = { host, postParamsToBeDeleted };
