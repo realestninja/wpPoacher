@@ -9,14 +9,15 @@ const get = async (url) => {
   try {
     response = await axios.get(url);
   } catch (e) {
-    console.error("e:", e);
+    // console.error("e:", e);
+    return false;
   }
   return response;
 };
 
-const fetchData = async () => {
-  const response = await get(postAPI);
-  return response.data[0];
+const fetchData = async (page) => {
+  const response = await get(`${postAPI}${page}`);
+  return response ? response.data[0] : response;
 };
 
 const fetchMediaUrl = async (id) => {
