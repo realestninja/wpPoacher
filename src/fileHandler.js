@@ -1,4 +1,15 @@
+const fs = require("fs");
+
 const { fetchMediaUrl, performDownload } = require("./apiCalls");
+
+const createOutputFolder = (folderName = "") => {
+  let outputFolderName = "./output";
+  if (!fs.existsSync(outputFolderName)) fs.mkdirSync(outputFolderName);
+  if (fs.existsSync(outputFolderName)) {
+    outputFolderName += `/${folderName}`;
+    if (!fs.existsSync(outputFolderName)) fs.mkdirSync(outputFolderName);
+  }
+};
 
 const createFolderName = (content) => {
   const trimmedDate = content.date.slice(0, 10);
@@ -7,9 +18,8 @@ const createFolderName = (content) => {
 
 const saveContent = async (content) => {
   const folderName = createFolderName(content);
-  console.log("folderName:", folderName);
 
-  // to do: create folder, save `content` as json and also image into folder
+  createOutputFolder(folderName);
 
   const featuredMediaId = content.featured_media;
   const mediaUrl = await fetchMediaUrl(featuredMediaId);
