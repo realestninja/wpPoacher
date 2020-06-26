@@ -59,12 +59,12 @@ const createFileStructure = (content) => {
   return createOutputFolder(folderName) ? getFolderPath(folderName) : "";
 };
 
-const handleContent = (rawContent) => {
+const handleContent = async (rawContent) => {
   const contentFolderPath = createFileStructure(rawContent);
 
   if (contentFolderPath.length > 0) {
     saveMedia(contentFolderPath, rawContent);
-    saveContent(contentFolderPath, processData(rawContent));
+    saveContent(contentFolderPath, await processData(rawContent));
   }
 };
 
