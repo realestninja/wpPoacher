@@ -12,15 +12,19 @@ const pruneBody = (body) => {
   const document = parse5.parse(body);
 
   // iterate body content -> search divs -> delete certain divs
-  document.childNodes[0].childNodes[1].childNodes.forEach((item) => {
+  const htmlBody = document.childNodes[0].childNodes[1];
+  htmlBody.childNodes.forEach((item) => {
     if (item.nodeName === "div") {
       item.attrs.forEach((attr) => {
-        if (attr.value.includes("photonic-stream")) utils.remove(item);
+        if (attr.value.includes(
+          "photonic-stream"
+          || "ngg-galleryoverview",
+        )) utils.remove(item);
       });
     }
   });
 
-  return utils.serialize(document);
+  return utils.serialize(htmlBody);
 };
 
 const processData = async (data) => {
