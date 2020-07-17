@@ -1,5 +1,6 @@
 const Entities = require("html-entities").AllHtmlEntities;
-const { parse } = require("node-html-parser");
+const parse5 = require("parse5");
+const utils = require("parse5-utils");
 
 const { omit } = require("./lib");
 const { postParamsToBeDeleted } = require("../config");
@@ -8,15 +9,18 @@ const { getCategoryNames } = require("./apiCalls");
 const entities = new Entities();
 
 const pruneBody = (body) => {
-  const root = parse(body);
-  // console.log('root.querySelector("#photonic-google-stream-1"): ', root.querySelector("#photonic-google-stream-1").set_content(""));
-  root.querySelector(".photonic-stream").removeAttribute("id");
-  root.removeChild(root.querySelector(".photonic-stream"));
+  const document = parse5.parse(body);
 
-  // console.log("root:", root.querySelector(".photonic-stream").firstChild);
-  console.log("root:", root);
-  // console.log("root:", root.childNodes.length);
-  return body;
+  // iterate body content -> search divs -> delete certain divs
+  document.childNodes[0].childNodes[1].childNodes.forEach((item) => {
+    if (item.nodeName === "div") {
+      item.attrs.forEach((attr) => {
+        if (attr.value.includes("photonic-stream")) utils.remove(item);
+      });
+    }
+  });
+
+  return utils.serialize(document);
 };
 
 const processData = async (data) => {
