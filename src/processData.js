@@ -1,9 +1,11 @@
 const Entities = require("html-entities").AllHtmlEntities;
 const parse5 = require("parse5");
 const utils = require("parse5-utils");
+const some = require("lodash/some");
+const includes = require("lodash/includes");
 
 const { omit } = require("./lib");
-const { postParamsToBeDeleted } = require("../config");
+const { postParamsToBeDeleted, bodyDivsToBeDeleted } = require("../config");
 const { getCategoryNames } = require("./apiCalls");
 
 const entities = new Entities();
@@ -16,10 +18,7 @@ const pruneBody = (body) => {
   htmlBody.childNodes.forEach((item) => {
     if (item.nodeName === "div") {
       item.attrs.forEach((attr) => {
-        if (attr.value.includes(
-          "photonic-stream"
-          || "ngg-galleryoverview",
-        )) utils.remove(item);
+        if (some(bodyDivsToBeDeleted, (el) => includes(attr.value, el))) utils.remove(item);
       });
     }
   });
