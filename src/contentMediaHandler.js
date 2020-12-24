@@ -5,7 +5,7 @@ const isNil = require("lodash/isNil");
 const { fetchMediaUrl } = require("./apiCalls");
 const { blogFolderPath, outputPath } = require("./constants");
 const { processData } = require("./processData");
-const { teaserImageSettings } = require("../config");
+const { teaserImageSettings, saveSettings } = require("../config");
 
 const createOutputFolder = (folderName) => {
   if (!folderName.length > 0) return false;
@@ -26,7 +26,7 @@ const createFolderName = (content) => {
   return `${trimmedDate}_${content.slug}`;
 };
 
-const getFolderPath = (folderName) => `${blogFolderPath}/${folderName}`;
+const getFolderPath = (folderName) => `${blogFolderPath}/${saveSettings.saveInSeparateFolders ? folderName : ""}`;
 
 const storeData = (data, path) => {
   try {
@@ -52,12 +52,16 @@ const saveMedia = async (contentFolder, content) => {
 };
 
 const saveContent = (contentFolder, content) => {
-  storeData(content, `${contentFolder}/content.json`);
+  const path = `${contentFolder}/${saveSettings.useGenericJsonFileName ? "content" : content.slug}.json`;
+  storeData(content, path);
 };
 
 const createFileStructure = (content) => {
   const folderName = createFolderName(content);
-  return createOutputFolder(folderName) ? getFolderPath(folderName) : "";
+  if (saveSettings.saveInSeparateFolders) {
+    return createOutputFolder(folderName) ? getFolderPath(folderName) : "";
+  }
+  return getFolderPath(folderName);
 };
 
 const handleContent = async (rawContent) => {

@@ -1,4 +1,5 @@
 const host = "https://demo.wp-api.org";
+
 const postParamsToBeDeleted = [];
 
 const teaserImageSettings = {
@@ -6,5 +7,14 @@ const teaserImageSettings = {
   saveUrl: true,
 };
 
+const saveSettings = {
+  saveInSeparateFolders: false,
+  useGenericJsonFileName: false,
+};
 
-module.exports = { host, postParamsToBeDeleted, teaserImageSettings };
+module.exports = {
+  host,
+  postParamsToBeDeleted,
+  teaserImageSettings,
+  saveSettings,
+};
