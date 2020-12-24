@@ -8,7 +8,7 @@ const main = async () => {
     if (!rawContent) {
       currentPost = -1;
     } else {
-      handleContent(rawContent);
+      await handleContent(rawContent);
       currentPost += 1;
       console.log(`${rawContent.title}: DONE`);
     }
