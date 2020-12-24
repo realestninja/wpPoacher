@@ -3,10 +3,11 @@ const parse5 = require("parse5");
 const utils = require("parse5-utils");
 const some = require("lodash/some");
 const includes = require("lodash/includes");
+const isNil = require("lodash/isNil");
 
 const { omit } = require("./lib");
-const { postParamsToBeDeleted, bodyDivsToBeDeleted } = require("../config");
-const { getCategoryNames } = require("./apiCalls");
+const { postParamsToBeDeleted, bodyDivsToBeDeleted, teaserImageSettings } = require("../config");
+const { getCategoryNames, fetchMediaUrl } = require("./apiCalls");
 
 const entities = new Entities();
 
@@ -31,6 +32,11 @@ const processData = async (data) => {
 
   processedData.teaser = data.excerpt.rendered;
   delete processedData.excerpt;
+
+  if (teaserImageSettings.saveUrl && !isNil(data.featured_media)) {
+    const mediaUrl = await fetchMediaUrl(data.featured_media);
+    if (mediaUrl) processedData.teaserImageUrl = mediaUrl;
+  }
 
   processedData.title = entities.decode(data.title.rendered);
   delete processedData.title.rendered;

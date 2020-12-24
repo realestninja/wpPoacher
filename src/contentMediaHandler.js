@@ -5,6 +5,7 @@ const isNil = require("lodash/isNil");
 const { fetchMediaUrl } = require("./apiCalls");
 const { blogFolderPath, outputPath } = require("./constants");
 const { processData } = require("./processData");
+const { teaserImageSettings } = require("../config");
 
 const createOutputFolder = (folderName) => {
   if (!folderName.length > 0) return false;
@@ -61,9 +62,8 @@ const createFileStructure = (content) => {
 
 const handleContent = async (rawContent) => {
   const contentFolderPath = createFileStructure(rawContent);
-
   if (contentFolderPath.length > 0) {
-    saveMedia(contentFolderPath, rawContent);
+    if (teaserImageSettings.saveMedia) saveMedia(contentFolderPath, rawContent);
     saveContent(contentFolderPath, await processData(rawContent));
   }
 };
