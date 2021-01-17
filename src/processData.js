@@ -19,8 +19,15 @@ const pruneBody = (body) => {
   htmlBody.childNodes.forEach((item) => {
     if (item.nodeName === "div") {
       item.attrs.forEach((attr) => {
+        // this is buggy... has to be solved in a different way because outer forEach will fail
         if (some(bodyDivsToBeDeleted, (el) => includes(attr.value, el))) utils.remove(item);
       });
+    }
+  });
+  // temporary second iteration
+  htmlBody.childNodes.forEach((item) => {
+    if (item.nodeName === "#comment") {
+      utils.remove(item);
     }
   });
 
